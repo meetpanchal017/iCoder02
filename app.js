@@ -5,9 +5,10 @@ const { static } = require("express");
 const app = express();
 const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/iCoder", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/iCoder", {
+  useNewUrlParser: true,
+});
 const PORT = process.env.PORT || 4000;
-
 
 //Define mongoose schema
 
@@ -16,21 +17,21 @@ const contactSchema = new mongoose.Schema({
   email: String,
   concern: String,
   about: String,
-  member: Boolean
+  member: Boolean,
 });
 const contact = mongoose.model("contact", contactSchema);
 
 //login
 const loginSchema = new mongoose.Schema({
   email: String,
-  password: String
+  password: String,
 });
 const login = mongoose.model("login", loginSchema);
 
 //signup
 const signupSchema = new mongoose.Schema({
   email: String,
-  password: String
+  password: String,
 });
 const signup = mongoose.model("signup", signupSchema);
 
@@ -39,18 +40,17 @@ const signup = mongoose.model("signup", signupSchema);
 app.use("/static", express.static("static"));
 app.use(express.urlencoded());
 
-
 //EndPoints
 app.get("/", (req, res) => {
-  const params ={};
+  const params = {};
   res.sendFile(__dirname + "/index.html");
 });
 app.get("/about", (req, res) => {
-  const params ={};
+  const params = {};
   res.sendFile(__dirname + "/about.html");
 });
 app.get("/contact", (req, res) => {
-  const params ={};
+  const params = {};
   res.sendFile(__dirname + "/contact.html");
 });
 
@@ -91,5 +91,5 @@ app.post("/signup", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`App is started on port ${PORT}`);
-  });
+  console.log(`App is started on port ${PORT}`);
+});
